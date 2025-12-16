@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>🎄 Noel của Phan Trọng Dương🎄</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+* { box-sizing: border-box; }
+
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #f8fafc;
+
+
+    background:
+        radial-gradient(circle at top, #0b3a2e 0%, #02140f 55%),
+        linear-gradient(180deg, #02140f, #000);
+
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 36px;
+    color: #ff4d4d;
+    margin-bottom: 10px;
+}
+
+header p {
+    color: #fde68a;
+}
+
+
+.hero img {
+    width: 100%;
+    max-height: 420px;
+    object-fit: cover;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+    margin: 30px 0;
+}
+
+
+.card, .box {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(6px);
+    padding: 22px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    margin-top: 30px;
+}
+
+.card h2, .box h2 {
+    color: #facc15;
+}
+
+
+input, textarea {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 12px;
+    border: none;
+    outline: none;
+    background: #020617;
+    color: #fff;
+    font-size: 14px;
+}
+
+
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+    background: linear-gradient(135deg, #ff4d4d, #facc15);
+    color: #020617;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+
+.wish {
+    background: rgba(0,0,0,0.4);
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 10px;
+    font-size: 14px;
+    border-left: 3px solid #facc15;
+}
+
+
+footer {
+    margin-top: 40px;
+    font-size: 14px;
+    color: #e5e7eb;
+}
+
+
+.snow {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 999;
+}
+
+.snow span {
+    position: absolute;
+    top: -10px;
+    width: 6px;
+    height: 6px;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.8;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh);
+    }
+}
+
+
+@media (max-width: 600px) {
+    header h1 {
+        font-size: 28px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+
+<div class="snow" id="snow"></div>
+
+<div class="container">
+
+<header>
+    <h1>🎄 Noel của Phan Trọng Dương 🎄</h1>
+    <p>Gửi lời chúc ẩn danh trong đêm Giáng Sinh</p>
+</header>
+
+<div class="hero">
+    <img src="pic.jpg" alt="Giáng Sinh">
+</div>
+
+<div class="card">
+    <h2>✨ Lời chúc</h2>
+    <p>
+        Chúc bạn một mùa Giáng Sinh an lành,  
+        ấm áp và tràn đầy yêu thương ❤️
+    </p>
+</div>
+
+<div class="box">
+    <h2>🎁 Gửi lời chúc ẩn danh</h2>
+    <textarea id="wishInput" placeholder="Nhập lời chúc của bạn..."></textarea>
+    <button onclick="sendWish()">Gửi lời chúc</button>
+    <div id="wishList"></div>
+</div>
+
+<div class="box">
+    <h2>🔐 Giải mật số Noel (gồm 4 chữ số)</h2>
+    <input id="codeInput" placeholder="Nhập mã bí mật">
+    <button onclick="checkCode()">Giải mã</button>
+    <p id="secretMsg"></p>
+</div>
+
+<footer>
+    © 2025 • Merry Christmas 🎅
+</footer>
+
+</div>
+
+<script>
+const snowBox = document.getElementById("snow");
+for (let i = 0; i < 50; i++) {
+    const s = document.createElement("span");
+    s.style.left = Math.random() * 100 + "%";
+    s.style.animationDuration = 5 + Math.random() * 8 + "s";
+    s.style.opacity = Math.random();
+    s.style.width = s.style.height = 3 + Math.random() * 4 + "px";
+    snowBox.appendChild(s);
+}
+
+
+const wishList = document.getElementById("wishList");
+
+function loadWishes() {
+    const wishes = JSON.parse(localStorage.getItem("wishes") || "[]");
+    wishList.innerHTML = "";
+    wishes.forEach(w => {
+        const div = document.createElement("div");
+        div.className = "wish";
+        div.textContent = w;
+        wishList.prepend(div);
+    });
+}
+
+function sendWish() {
+    const input = document.getElementById("wishInput");
+    if (!input.value.trim()) return;
+
+    const wishes = JSON.parse(localStorage.getItem("wishes") || "[]");
+    wishes.push(input.value);
+    localStorage.setItem("wishes", JSON.stringify(wishes));
+
+    input.value = "";
+    loadWishes();
+}
+
+loadWishes();
+
+
+function checkCode() {
+    const code = document.getElementById("codeInput").value;
+    const msg = document.getElementById("secretMsg");
+
+    if (code === "2512") {
+        msg.textContent = "🎉 Bạn đoán đúng rồi! Giáng Sinh an lành và hạnh phúc!";
+        msg.style.color = "#22c55e";
+    } else {
+        msg.textContent = "❌ Sai mã rồi 🎅";
+        msg.style.color = "#f87171";
+    }
+}
+</script>
+
+</body>
+</html>
